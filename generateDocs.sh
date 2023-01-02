@@ -6,13 +6,15 @@ if [ "$#" -ge 1 ]; then
     SCRIPT_PATH="${1}"
 fi
 if [ "$#" -ge 2 ]; then
-    DOC_PATH="${2}"
+    OUT_PATH="${2}"
 fi
 
-SCRIPT_PATH=$(realpath "${SCRIPT_PATH}")
-OUT_PATH=$(realpath "${OUT_PATH}")
+SCRIPT_PATH=$(readlink -m "${SCRIPT_PATH}")
+OUT_PATH=$(readlink -m "${OUT_PATH}")
+echo "Reading ${SCRIPT_PATH}"
+echo "Output to ${OUT_PATH}"
 
-echo "" > ${OUT_PATH}
+echo "# Overview of objects used in ${SCRIPT_PATH}" > ${OUT_PATH}
 
 # title, filter
 print_result() {
