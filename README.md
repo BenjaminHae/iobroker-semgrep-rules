@@ -28,5 +28,7 @@ pip install -r requirements.txt
 
 ## Known Problems
 
-The semgrep rules work best with plain string constants, string constants within arrays or format-strings (enclosed in backticks `\``) are often not identified correctly.
+The semgrep rules work best with plain string constants, problematic expressions are currently:
+ - IDs specified as arrays
+ - format-strings for example like that `\`zigbee.0.${foo}\``
 
