@@ -10,6 +10,7 @@ if [ "$#" -ge 2 ]; then
 fi
 
 SCRIPT_PATH=$(readlink -m "${SCRIPT_PATH}")
+[[ "${SCRIPT_PATH}" != */ ]] && SCRIPT_PATH="${SCRIPT_PATH}/"
 OUT_PATH=$(readlink -m "${OUT_PATH}")
 echo "Reading ${SCRIPT_PATH}"
 echo "Output to ${OUT_PATH}"
@@ -30,22 +31,21 @@ print_result() {
     fi
 }
 
-cd "${SCRIPT_PATH}"
-
-# todo use find instead of loop
-for f in */; do
-  cd $f;
-  for t in *; do
-    echo "## $f$t" >> ${OUT_PATH}
+analyse_file() {
+    local SCRIPT_FILE="${1}"
+    echo "## ${SCRIPT_FILE#$SCRIPT_PATH}" >> ${OUT_PATH}
     echo "" >> ${OUT_PATH}
     # todo use json output
-    SEMRES=$(semgrep --config=../../rules.yml "${t}" 2> /dev/null | sed "s/^\s*//;s/'//g;s/\"//g" | grep iob.js)
+    SEMRES=$(semgrep --config=rules.yml "${SCRIPT_FILE}" 2> /dev/null | sed "s/^\s*//;s/'//g;s/\"//g" | grep iob.js)
+    echo $SEMRES
 
-    print_result Subscriptions on
+    print_result "Subscriptions" on
     print_result "Set State" setState
     print_result "Get State" getState
     print_result "Schedule" schedule
+}
 
-  done
-  cd ..
-done;
+find ${SCRIPT_PATH} -type f \( -iname "*.ts" -o -iname "*.js" \) -print0 | sort -z | while IFS= read -r -d '' file; do analyse_file "$file"; done
+
+exit
+cd "${SCRIPT_PATH}"
