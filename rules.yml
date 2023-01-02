@@ -1,0 +1,165 @@
+rules:
+  - id: iobroker_setstate_rule
+    pattern-either: 
+     - pattern: setState("$ID",...)
+     - pattern: setStateAsync("$ID",...)
+    message: iob.js setState $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_setstate_format_string_rule
+    pattern-either:
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           setStateAsync($BLA, ...)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           setState($BLA, ...)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+        - pattern-inside: |
+            setStateAsync($ID,...)
+        - metavariable-regex:
+            metavariable: $ID
+            regex: ^`.*$
+     - patterns:
+        - pattern-inside: |
+            setState($ID, ...)
+        - metavariable-regex:
+            metavariable: $ID
+            regex: ^`.*$
+    message: iob.js setState $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_getstate_rule
+    pattern-either: 
+     - pattern: getState("$ID")
+     - pattern: getStateAsync("$ID")
+    message: iob.js getState $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_getstate_format_string_rule
+    pattern-either:
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           getStateAsync($BLA)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           getState($BLA)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+        - pattern-inside: |
+            getStateAsync($ID)
+        - metavariable-regex:
+            metavariable: $ID
+            regex: ^`.*$
+     - patterns:
+        - pattern-inside: |
+            getState($ID)
+        - metavariable-regex:
+            metavariable: $ID
+            regex: ^`.*$
+    message: iob.js getState $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_on_rule
+    pattern-either: 
+     - pattern: on("$ID", ...)
+     - pattern: |
+         on({"id": "$ID"}, ...)
+    message: iob.js on $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_on_with_array_rule
+    pattern-either: 
+    - pattern: |
+        on({id: ($ID : array)}, ...)
+    message: iob.js on $ID
+    languages:
+      - ts
+    severity: WARNING
+  - id: iobroker_on_with_array_single_string_rule
+    pattern-either: 
+    - pattern: |
+        on({id: ["$ID"]}, ...)
+    message: iob.js on $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_on_with_array
+    pattern-either:
+    - patterns:
+      - pattern-inside: on($IDS, ...)
+      - metavariable-regex:
+          metavariable: $IDS
+          regex: ^\[.*$
+    - patterns:
+      - pattern-inside: "on({id: $IDS}, ...)"
+      - metavariable-regex:
+          metavariable: $IDS
+          regex: ^\[.*$
+    message: iob.js on $IDS
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_on_format_string_rule
+    pattern-either:
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           on($BLA, ...)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+       - pattern: |
+           $BLA = $ID
+           on({id: $BLA}, ...)
+       - metavariable-regex:
+           metavariable: $ID
+           regex: ^`.*$
+     - patterns:
+        - pattern-inside: |
+            on($ID,...)
+        - metavariable-regex:
+            metavariable: $ID
+            regex: ^`.*$
+    message: iob.js setState $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
+  - id: iobroker_schedule
+    pattern-either: 
+    - pattern: |
+        schedule("$ID", ...)
+    message: iob.js schedule $ID
+    languages:
+      - ts
+      - js
+    severity: WARNING
