@@ -71,3 +71,11 @@ The semgrep rules work best with plain string constants, problematic expressions
  - IDs specified as arrays
  - format-strings for example like that `\`zigbee.0.${foo}\``
 
+## Supported Functions
+
+ - getState
+ - getStateAsync
+ - setState
+ - setStateAsync
+ - on
+ - schedule
