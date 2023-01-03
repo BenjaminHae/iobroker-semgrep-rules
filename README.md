@@ -1,6 +1,6 @@
 # Semgrep rules for iobroker.javascript
 
-The script in this repository generates a markdown file that contains an overview of objects and schedules used in scripts used for iobroker.javascript.
+The script in this repository generates a markdown file that contains an overview of objects and schedules used in scripts used for iobroker.javascript. The underlying technology to achieve this is [semgrep](https://semgrep.dev/).
 
 For example, when a script contains the following code
 
