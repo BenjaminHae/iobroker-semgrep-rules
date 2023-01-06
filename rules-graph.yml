@@ -1,0 +1,58 @@
+rules:
+  - id: iobroker_trigger_on
+    pattern-either:
+      - patterns:
+        - pattern: setState("$OUT_ID", ...)
+        - pattern-either:
+          - pattern-inside: |
+              on("$IN_ID", function(...) {
+                ...
+              })
+          - pattern-inside: |
+              on("$IN_ID", (...)=>{
+                ...
+                })
+          - pattern-inside: |
+              function $FUNC(...) {
+                ...
+              }
+              ...
+              on("$IN_ID", $FUNC)
+          - pattern-inside: |
+              function $FUNC(...) {
+                ...
+              }
+              ...
+              on("$IN_ID", (...)=>{
+                ...
+                $FUNC(...)
+                ...
+                })
+          - pattern-inside: |
+              $FUNC = function (...) {
+                ...
+              }
+              ...
+              on("$IN_ID", (...)=>{
+                ...
+                $FUNC(...)
+                ...
+                })
+    message: iob.js $IN_ID triggers $OUT_ID
+    languages:
+      - ts
+    severity: WARNING
+  # todo replace with metavar (so that getStateAsync also works)
+  - id: iobroker_affects
+    pattern: |
+      {
+        ...
+        getState("$IN_ID");
+        ...
+        setState("$OUT_ID", ...);
+        ...
+      }
+    message: iob.js $IN_ID affects $OUT_ID
+    languages:
+      - ts
+    severity: WARNING
