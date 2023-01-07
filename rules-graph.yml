@@ -2,12 +2,23 @@ rules:
   - id: iobroker_trigger_on
     pattern-either:
       - patterns:
-        - pattern: setState("$OUT_ID", ...)
+        - pattern: $SETSTATE("$OUT_ID", ...)
+        - metavariable-regex:
+            metavariable: $SETSTATE
+            regex: setState(Async)?
         - pattern-either:
+          - pattern-inside: |
+              on({id: "$IN_ID"}, function(...) {
+                ...
+              })
           - pattern-inside: |
               on("$IN_ID", function(...) {
                 ...
               })
+          - pattern-inside: |
+              on({id:"$IN_ID"}, (...)=>{
+                ...
+                })
           - pattern-inside: |
               on("$IN_ID", (...)=>{
                 ...
@@ -23,7 +34,23 @@ rules:
                 ...
               }
               ...
+              on({id: "$IN_ID"}, $FUNC)
+          - pattern-inside: |
+              function $FUNC(...) {
+                ...
+              }
+              ...
               on("$IN_ID", (...)=>{
+                ...
+                $FUNC(...)
+                ...
+                })
+          - pattern-inside: |
+              function $FUNC(...) {
+                ...
+              }
+              ...
+              on({id: "$IN_ID"}, (...)=>{
                 ...
                 $FUNC(...)
                 ...
@@ -44,14 +71,21 @@ rules:
     severity: WARNING
   # todo replace with metavar (so that getStateAsync also works)
   - id: iobroker_affects
-    pattern: |
-      {
-        ...
-        getState("$IN_ID");
-        ...
-        setState("$OUT_ID", ...);
-        ...
-      }
+    patterns:
+     - pattern: |
+        {
+          ...
+          $GETSTATE("$IN_ID");
+          ...
+          $SETSTATE("$OUT_ID", ...);
+          ...
+        }
+     - metavariable-regex:
+         metavariable: $GETSTATE
+         regex: getState(Async)?
+     - metavariable-regex:
+         metavariable: $SETSTATE
+         regex: setState(Async)?
     message: iob.js $IN_ID affects $OUT_ID
     languages:
       - ts
