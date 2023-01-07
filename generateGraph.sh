@@ -25,13 +25,13 @@ print_result() {
     then
         echo "$1 is empty"
     else
-        echo "$LIST" | sed "s/^\\s*\\S*\\s\\(.*\\)\\s$2\\S*\\s\\(.*\\)$/   \1 $3 \2/" >> ${OUT_PATH}
+        echo "$LIST" | sed "s/^\\s*\\S*\\s\\(.*\\)\\s$2\\S*\\s\\(.*\\)$/   \1 $3 text $(rev <<< $3)\> \2/" >> ${OUT_PATH}
     fi
 }
 
 SEMRES=$(semgrep --config=rules-graph.yml "${SCRIPT_PATH}" 2> /dev/null | sed "s/^\s*//;s/'//g;s/\"//g" | grep iob.js)
-print_result "Triggers" triggers --\>
-print_result "Affects" affects -.-\>
+print_result "Triggers" triggers --
+print_result "Affects" affects -.
 
 #analyse_file() {
 #    local SCRIPT_FILE="${1}"
