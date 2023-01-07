@@ -23,9 +23,9 @@ print_result() {
     LIST=$(echo "$SEMRES" | grep " $2 " | sort | uniq)
     if [ -z "$LIST" ]
     then
-        echo "$1 is empty"
+        >&2 echo "$1 is empty"
     else
-        echo "$LIST" | sed "s/^\\s*\\S*\\s\\(.*\\)\\s$2\\S*\\s\\(.*\\)$/   \1 $3 ${SCRIPT_NAME//\//\\\/} $(rev <<< $3)\> \2/" >> ${OUT_PATH}
+        echo "$LIST" | sed "s/^\\s*\\S*\\s\\(.*\\)\\s$2\\S*\\s\\(.*\\)$/   \1 $3 ${SCRIPT_NAME//\//\\\/} $(rev <<< $3)\> \2/"# >> ${OUT_PATH}
     fi
 }
 
@@ -38,10 +38,15 @@ analyse_file() {
     SCRIPT_NAME=${SCRIPT_FILE#$SCRIPT_PATH}
     # todo use json output
     SEMRES=$(semgrep --config=rules-graph.yml "${SCRIPT_FILE}" 2> /dev/null | sed "s/^\s*//;s/'//g;s/\"//g" | grep iob.js)
-    echo $SEMRES
+    >&2 echo $SEMRES
 
     print_result "Triggers" triggers --
     print_result "Affects" affects -.
 }
 
-find ${SCRIPT_PATH} -type f \( -iname "*.ts" -o -iname "*.js" \) -print0 | sort -z | while IFS= read -r -d '' file; do analyse_file "$file"; done
+handle_files() {
+    find ${SCRIPT_PATH} -type f \( -iname "*.ts" -o -iname "*.js" \) -print0 | sort -z | while IFS= read -r -d '' file; do analyse_file "$file"; done
+}
+
+handle_files | sort | uniq
+

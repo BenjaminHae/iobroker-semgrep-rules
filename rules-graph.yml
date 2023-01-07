@@ -65,6 +65,18 @@ rules:
                 $FUNC(...)
                 ...
                 })
+          - pattern-inside: |
+              function $FUNC(...) {
+                ...
+              }
+              ...
+              on({id: "$IN_ID"}, (...)=>$FUNC)
+          - pattern-inside: |
+              $FUNC = function (...) {
+                ...
+              }
+              ...
+              on("$IN_ID", (...)=>$FUNC)
     message: iob.js $IN_ID triggers $OUT_ID
     languages:
       - ts
