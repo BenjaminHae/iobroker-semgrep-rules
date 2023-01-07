@@ -55,9 +55,9 @@ This is the graph generated using the `generateGraph.sh` script:
 
 ```mermaid
 flowchart LR
-   this.is.id.4 -- text --> this.is.id.1
-   this.is.id.5 -- text --> this.is.id.1
-   this.is.id.2 -. text .-> this.is.id.1
+   this.is.id.4 -- test.ts --> this.is.id.1
+   this.is.id.5 -- test.ts --> this.is.id.1
+   this.is.id.2 -. test.ts .-> this.is.id.1
 ```
 
 ## Installation
