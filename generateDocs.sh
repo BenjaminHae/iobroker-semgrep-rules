@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+if ! command -v semgrep &> /dev/null
+then
+    echo "semgrep could not be found"
+    exit
+fi
+
 SCRIPT_PATH="scripts/"
 OUT_PATH="docs/files.md"
 
