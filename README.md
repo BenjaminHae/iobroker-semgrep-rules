@@ -20,8 +20,13 @@ function bla() {
 }
 getStateAsync(id_of_thing3)
 on(id_of_thing4, bla)
-on({"id": id_of_thing5}, bla)
+on({"id": id_of_thing5}, 
+    ()=>{
+        setState(id_of_thing3, false)
+        setState(id_of_thing2, false)
+    })
 on({id: [id_of_thing6]}, bla)
+)
 schedule("19 5 * * *", bla)
 ```
 
@@ -55,9 +60,9 @@ This is the graph generated using the `generateGraph.sh` script:
 
 ```mermaid
 flowchart LR
-   this.is.id.4 -- test.ts --> this.is.id.1
-   this.is.id.5 -- test.ts --> this.is.id.1
    this.is.id.2 -. test.ts .-> this.is.id.1
+   this.is.id.4 -- test.ts --> this.is.id.1
+   this.is.id.5 -- test.ts --> this.is.id.2
 ```
 
 ## Installation
